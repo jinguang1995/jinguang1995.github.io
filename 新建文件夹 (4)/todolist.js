@@ -24,14 +24,23 @@ var keycode = e.which ? e.which : e.keyCode;
 if(keycode == 13 || keycode == 108){ //如果按下ENTER键 
 //在这里设置你想绑定的事件 
 if(input.value!=""){
-var oDiv=document.createElement('div');	
+var oDiv=document.createElement('li');	
 	oDiv.className="demo";
+var obj=document.createElement('label'),
+	check=document.createElement('input'),
+	button=document.createElement('button');
+	check.className="toggle";
+	check.type="checkbox";	
+	button.className="wow";
+	oDiv.appendChild(button);
+	obj.innerText=this.value;
 	parent.appendChild(oDiv);
+	oDiv.appendChild(obj);
+	oDiv.appendChild(check);
 	input.value="";
 			} 
 		}   
 	
 	}
-
 
 }

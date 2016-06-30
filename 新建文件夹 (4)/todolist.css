@@ -5,7 +5,6 @@
 	}
 #demo{
 	width:600px;
-	height:400px;
 	background-color:#CCC;
 	text-align:center;
 	}
@@ -16,8 +15,17 @@
 .demo{
 	width:400px;
 	height:50px;
-	background-color:#F00;
+	border:1px solid #00F;
 	margin-left:100px;
+	line-height:50px;
+	list-style:none;
+	}	
+.wow{
+	width:30px;
+	height:30px;
+	background:#00F;
+	float:right;
+	margin-top:10px;
 	}	
 #wraper{
 	width:400px;
@@ -26,12 +34,12 @@
 	left:99px;
 	background-color:#FFF;
 	border:1px solid #0FF;
+	display:block;
 	}
 #wrape{
 	width:40px;
 	height:50px;
 	float:left;
-	display:none;
 	}	
 #wrap{
 	outline:none;
@@ -40,3 +48,28 @@
 	height:50px;
 	float:right;
 	}	
+#down{
+	width:600px;
+	height:40px;
+	background:#0FF;
+	text-align:center;
+	}	
+#down ul li{
+	list-style:none;
+	float:left;
+	padding:2px;
+	margin-top:10px;
+	margin-left:40px;
+	margin-right:40px;
+	}
+#down ul li a{
+	text-decoration:none;
+	}	
+#down ul li a:hover{
+	border:1px solid #FFF;
+	}
+.toggle{
+	width:40px;
+	height:50px;
+	float:left;
+	}		
