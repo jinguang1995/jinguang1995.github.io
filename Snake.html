@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<title>bootstrap</title>
+</head>
+	<style type="text/css">
+		
+		#wrapper{
+			width: 1000px;
+			height: 550px;
+			border:1px solid black;
+			margin: 0 auto;
+		}
+		#grass{
+			width: 1000px;
+			height: 500px;
+			background: blue;
+			position: relative;
+		}
+		#button{
+			float: right;
+			height: 50px;
+			line-height: 50px;
+		}
+		button{
+			width: 50px;
+			height: 20px;
+		}
+
+		.snakeBody{
+			width: 20px;
+			height: 20px;
+			background: yellow;
+			position: absolute;
+			top: 0;
+		}
+		.oldFood{
+			position: absolute;
+			width: 20px;
+			height: 20px;
+			background-color: yellow;
+		}
+		.newFood{
+			width: 20px;
+			height: 20px;
+			background: green;
+			position: absolute;
+		}
+
+	</style>
+<body>
+	<div id="wrapper">
+		<div id="grass"></div>
+		<div id="gameControl">
+			<div id="button">
+					<button id="start">开始</button>
+					<button id="pause">暂停</button>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript">
+//设置蛇的初始状态
+	var Snake = new Array();//创建数组
+	var ograss = document.getElementById("grass");
+		for(var i = 6;i>0;i--){
+			var oDiv = document.createElement("div");
+				oDiv.className = "snakeBody";
+				oDiv.style.left= i*20 + "px";
+				ograss.appendChild(oDiv);
+				Snake.push(oDiv);//向蛇身数组添加蛇身
+		}
+//定义所用变量
+var direction = 'right', //首先开始游戏后，蛇都是向右移动的
+	oStart = document.getElementById('start'),//设置开始
+	timer = null;
+//设置蛇的运动
+		oStart.onclick = function(){  //给开始加一个事件
+			clearInterval(timer);
+			timer = setInterval(function(){
+				move(direction);
+			},300);
+		}			
+//开始函数
+		function move(dir){
+			var snakeHead = Snake[0]; //获取蛇头，让蛇头移动
+			for(var i=Snake.length-1; i>0; i--){  //让蛇尾跟随蛇头
+				Snake[i].style.left = Snake[i-1].offsetLeft + "px";
+				Snake[i].style.top = Snake[i-1].offsetTop + "px";    //  父级是grass
+			}
+			switch(dir){
+				case "left":
+					snakeHead.style.left = snakeHead.offsetLeft - 20 + "px";
+					break;
+				case "up":
+					snakeHead.style.top = snakeHead.offsetTop - 20 + "px";
+					break;
+				case "right":
+					snakeHead.style.left = snakeHead.offsetLeft + 20 + "px";
+					break;
+				case "down":
+					snakeHead.style.top = snakeHead.offsetTop + 20 + "px";
+					break;
+			}
+			//蛇撞墙
+			if(snakeHead.offsetLeft == -20 || snakeHead.offsetTop == -20 || snakeHead.offsetLeft == 1000 || snakeHead.offsetTop == 500)
+			{
+				alert("游戏结束");
+				clearInterval(timer);
+				location.reload();
+			}
+			//蛇撞身体
+			for(var i = 1; i < Snake.length; i++){
+				if(snakeHead.offsetLeft == Snake[i].offsetLeft && snakeHead.offsetTop == Snake[i].offsetTop){
+					alert('游戏结束');
+					clearInterval(timer);
+					location.reload();
+				}
+			}
+			//蛇吃食物
+		if(snakeHead.offsetLeft == food.offsetLeft && snakeHead.offsetTop == food.offsetTop){
+			food.className = "oldFood";
+			if("direction" == "right"){
+				food.style.left = Snake[Snake.length - 1].offsetLeft - 20 + "px";
+			}else	if("direction" == "down"){
+				food.style.top = Snake[Snake.length - 1].offsetTop - 20 + "px";
+			}else	if("direction" == "left"){
+				food.style.left = Snake[Snake.length - 1].offsetLeft + 20 + "px";
+			}else	if("direction" == "up"){
+				food.style.top = Snake[Snake.length - 1].offsetTop + 20 + "px";
+			}
+			Snake.push(food);//蛇吃到食物
+			food = createFood();//重新生成食物
+		}
+		document.onkeydown = function(e){
+			e = e || window.event;
+			var keyCode = e.which || e.keyCode;
+			if(keyCode == 37 ){//左
+				if(direction != 'right'){
+					direction = 'left';
+					move(direction);
+				}
+			}else if(keyCode == 38){//上
+				if(direction != 'down'){
+					direction = 'up';
+					move(direction);
+				}
+			}else if(keyCode == 39){//右
+				if(direction != 'left'){
+					direction = 'right';
+					move(direction);
+				}
+			}else if(keyCode == 40){//下
+				if(direction != 'up'){
+					direction = 'down';
+					move(direction);
+				}
+		}
+	};
+
+	}
+
+//蛇暂停移动
+		var oPause = document.getElementById('pause');
+		oPause.onclick = function(){
+			clearInterval(timer);
+		}
+//生成食物
+	var food = createFood();
+	function createFood(){
+		var oFood = document.createElement("div");
+		oFood.className = "newFood";
+		while(!bFound){
+			var bFound = true;//一个标识，表示是否找到食物合适的位置
+			oLeft = Math.floor(Math.random() * 1000);
+			oLeft = oLeft - oLeft%20 ;//随机产生食物的位置
+			oTop = Math.floor(Math.random() * 500);
+			oTop = oTop - oTop%20;
+			for(var i = 0;i < Snake.length; i++){
+				if(Snake[i].offsetLeft == oLeft && Snake[i].offsetTop == oTop){
+					bFound = false;//表示食物与蛇身重合
+					break;
+				}
+			}
+			oFood.style.left = oLeft + "px";
+			oFood.style.top = oTop + "px";
+			ograss.appendChild(oFood);  
+		}
+		return oFood;
+}
+</script>
+</body>	
+</html>
